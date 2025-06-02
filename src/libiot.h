@@ -46,7 +46,7 @@ extern const char* root_ca;         ///< Certificado raíz de la autoridad de ce
 extern WiFiClientSecure espClient;  ///< Conexión TLS/SSL
 extern PubSubClient client;         ///< Cliente MQTT
 
-extern time_t now;                  ///< Timestamp de la fecha actual.
+extern time_t now0;                  ///< Timestamp de la fecha actual.
 extern long long int measureTime;   ///< Tiempo de la última medición
 extern long long int alertTime;     ///< Tiempo en que inició la última alerta
 extern String alert;                ///< Mensaje para mostrar en la pantalla
@@ -67,5 +67,5 @@ String checkAlert();                ///< Función checkAlert que verifica si ha 
 void receivedCallback(char* topic, byte* payload, unsigned int length); ///< Función receivedCallback que se ejecuta cuando llega un mensaje a la suscripción MQTT
 void sendSensorData(float temperatura, float humedad); ///< Función sendSensorData que publica la temperatura y humedad dadas al tópico configurado usando el cliente MQTT
 String getMacAddress();             ///< Función getMacAddress que adquiere la dirección MAC del dispositivo y la retorna en formato de cadena  
-
+void sendAllSensorData(float temperatura, float humedad, float bpm, uint8_t spo2, double lat, double lon, const char* timestamp);
 #endif /* LIBIOT_H */

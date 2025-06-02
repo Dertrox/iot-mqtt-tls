@@ -26,6 +26,7 @@
 #include <SHTSensor.h>
 #include <libota.h>
 
+time_t now0;
 //#define PRINT
 #ifdef PRINT
 #define PRINTD(x, y) Serial.println(x, y)
@@ -49,18 +50,18 @@ time_t setTime() {
   //Sincroniza la hora del dispositivo con el servidor SNTP (Simple Network Time Protocol)
   Serial.print("Ajustando el tiempo usando SNTP");
   configTime(-5 * 3600, 0, "pool.ntp.org", "time.nist.gov"); //Configura la zona horaria y los servidores SNTP
-  now = time(nullptr);              //Obtiene la hora actual
-  while (now < 1700000000) {        //Espera a que el tiempo sea mayor a 1700000000 (1 de enero de 2024)
+  now0 = time(nullptr);              //Obtiene la hora actual
+  while (now0 < 1700000000) {        //Espera a que el tiempo sea mayor a 1700000000 (1 de enero de 2024)
     delay(500);                     //Espera 500ms antes de volver a intentar obtener la hora
     Serial.print(".");
-    now = time(nullptr);            //Obtiene la hora actual
+    now0 = time(nullptr);            //Obtiene la hora actual
   }
   Serial.println(" hecho!");
   struct tm timeinfo;               //Estructura que almacena la información de la hora
-  gmtime_r(&now, &timeinfo);        //Obtiene la hora actual
+  gmtime_r(&now0, &timeinfo);        //Obtiene la hora actual
   Serial.print("Tiempo actual: ");  //Una vez obtiene la hora, imprime en el monitor el tiempo actual
   Serial.print(asctime(&timeinfo));
-  return now;
+  return now0;
 }
 
 /**
@@ -188,7 +189,25 @@ void sendSensorData(float temperatura, float humedad) {
   PRINTLN("client id: " + String(client_id) + "\ntopic: " + String(MQTT_TOPIC_PUB) + "\npayload: " + data);
   client.publish(MQTT_TOPIC_PUB, payload);
 }
+/**
+ * Publica todos los datos relevantes al tópico configurado usando el cliente MQTT.
+ */
+void sendAllSensorData(float temperatura, float humedad, float bpm, uint8_t spo2, double lat, double lon, const char* timestamp) {
+  String data = "{";
+  data += "\"temperatura\": " + String(temperatura, 1) + ", ";
+  data += "\"humedad\": " + String(humedad, 1) + ", ";
+  data += "\"bpm\": " + String(bpm, 1) + ", ";
+  data += "\"spo2\": " + String(spo2) + ", ";
+  data += "\"lat\": " + String(lat, 6) + ", ";
+  data += "\"lon\": " + String(lon, 6) + ", ";
+  data += "\"timestamp\": \"" + String(timestamp) + "\"";
+  data += "}";
 
+  char payload[data.length() + 1];
+  data.toCharArray(payload, data.length() + 1);
+  PRINTLN("client id: " + String(client_id) + "\ntopic: " + String(MQTT_TOPIC_PUB) + "\npayload: " + data);
+  client.publish(MQTT_TOPIC_PUB, payload);
+}
 
 /**
  * Función que se ejecuta cuando llega un mensaje a la suscripción MQTT.
