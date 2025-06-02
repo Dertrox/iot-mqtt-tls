@@ -27,11 +27,11 @@ void loop() {
   checkWiFi();                                                   // Paso 1. Verifica la conexión a la red WiFi y si no está conectado, intenta reconectar
   checkMQTT();                                                   // Paso 2. Verifica la conexión al servidor MQTT y si no está conectado, intenta reconectar
   String message = checkAlert();                                 // Paso 3. Verifica si hay alertas y las retorna en caso de haberlas
-  if(measure(&data)){   
+ /* if(measure(&data)){   
     monitor.update();                                         // Paso 4. Realiza una medición de temperatura y humedad
     displayLoop(message, hora, data.temperature, data.humidity); // Paso 5. Muestra en la pantalla el mensaje recibido, las medidas de temperatura y humedad
     sendSensorData(data.temperature, data.humidity);             // Paso 6. Envía los datos de temperatura y humedad al servidor MQTT xdxdxd
-  }  
+  }*/
   static uint32_t lastSend = 0;
   if (millis() - lastSend > 5000) {
     lastSend = millis();
@@ -44,10 +44,9 @@ void loop() {
 
     // Obtenemos todos los valores
     monitor.getCurrentReadings(temperatura, humedad, bpm, spo2, lat, lon, timestamp, sizeof(timestamp));
-
-    // Llamamos a la función ya existente en libiot.cpp
-    sendAllSensorData(temperatura, humedad, bpm, spo2, lat, lon, timestamp);
-  } 
-
-
+    //imprimimo en monitor serial
+    Serial.printf("Temp: %.2f°C  Hum: %.2f%%  BPM: %.1f  SpO2: %u%%  Lat: %.6f  Lon: %.6f  Time: %s\n",
+              temperatura, humedad, bpm, spo2, lat, lon, timestamp);
+    // Llamamos a la función nueva  en libiot.cpp
+    sendAllSensorData(temperatura, humedad, bpm, spo2, lat, lon, timestamp);  } 
 }
