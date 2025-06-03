@@ -39,7 +39,7 @@
 #define COUNTRY "colombia"                        ///< País donde se encuentra el dispositivo
 #define STATE "valle"                             ///< Estado donde se encuentra el dispositivo
 #define CITY "tulua"                              ///< Ciudad donde se encuentra el dispositivo
-#define MQTT_SERVER "uceva-iot-core.freeddns.org"         ///< Servidor MQTT
+#define MQTT_SERVER "uceva-iot-core.freeddns.org"         ///< Servidor MQTT  uceva-iot-core.freeddns.org
 #define MQTT_PORT 8883                            ///< Puerto seguro (TLS)
 #define MQTT_USER "admin"                       ///< Usuario MQTT no adninistrador 
 #define MQTT_PASSWORD "admin1234"                  ///< Contraseña del usuario MQTT

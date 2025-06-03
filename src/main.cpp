@@ -25,7 +25,8 @@ void setup() {
 // Función loop
 void loop() {
   checkWiFi();                                                   // Paso 1. Verifica la conexión a la red WiFi y si no está conectado, intenta reconectar
-  checkMQTT();                                                   // Paso 2. Verifica la conexión al servidor MQTT y si no está conectado, intenta reconectar
+  checkMQTT();      
+  monitor.update();                                              // Paso 2. Verifica la conexión al servidor MQTT y si no está conectado, intenta reconectar
   String message = checkAlert();                                 // Paso 3. Verifica si hay alertas y las retorna en caso de haberlas
  /* if(measure(&data)){   
     monitor.update();                                         // Paso 4. Realiza una medición de temperatura y humedad
